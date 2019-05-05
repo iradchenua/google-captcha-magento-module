@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="ivan" translate="label" sortOrder="10">
+            <label>Ivan</label>
+        </tab>
+        <section id="googlecaptcha" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Google Captcah</label>
+            <tab>ivan</tab>
+            <resource>Ivan_GoogleCaptcha::googlecaptcha_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Module Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="captcha_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Captcha Type</label>
+                    <source_model>Ivan\GoogleCaptcha\Model\Config\Source\ListMode</source_model>
+                </field>
+                <field id="checkbox_public_key" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Public key for check box</label>
+                    <comment>Set here public key provided by google for checkbox type of captcha.</comment>
+                </field>
+                <field id="checkbox_private_key" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Private key for checkbox</label>
+                    <comment>Set here private key provided by google for checkbox type of captcha.</comment>
+                </field>
+                <field id="invisible_public_key" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Public key for invisible</label>
+                    <comment>Set here public key provided by google for invisible type of captcha.</comment>
+                </field>
+                <field id="invisible_private_key" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Private key for invisible</label>
+                    <comment>Set here private key provided by google for invisible type of captcha.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
