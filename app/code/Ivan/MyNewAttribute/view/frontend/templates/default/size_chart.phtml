@@ -1,0 +1,12 @@
+<?php
+$sizeChartValue = $block->getSizeChartValue();
+?>
+<table>
+<?php foreach ($sizeChartValue as $size => $value) : ?>
+    <tr>
+        <td><?= $size ?></td>
+        <td><?= $value ?></td>
+    </tr>
+<?php endforeach; ?>
+</table>
+

@@ -8,20 +8,20 @@ class LoginPostUpdater
 {
     private $messageManager;
     private $resultRedirectFactory;
-    private $helperData;
+    private $dataProvider;
     private $jsonHelper;
 
     public function __construct(
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Controller\ResultFactory $resultRedirectFactory,
         \Magento\Framework\Serialize\Serializer\Json $jsonHelper,
-        \Ivan\GoogleCaptcha\Helper\Data $helperData
+        \Ivan\GoogleCaptcha\Model\DataProvider $dataProvider
     )
     {
         $this->messageManager = $messageManager;
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->jsonHelper = $jsonHelper;
-        $this->helperData = $helperData;
+        $this->dataProvider = $dataProvider;
     }
 
     private function getRequestToGoogleService($userResponseToken)
@@ -38,7 +38,7 @@ class LoginPostUpdater
         $request->setMethod(\Zend\Http\Request::METHOD_POST);
 
         $params = new \Zend\Stdlib\Parameters([
-            'secret' => $this->helperData->getPrivateSiteKey(),
+            'secret' => $this->dataProvider->getPrivateSiteKey(),
             'response' => $userResponseToken
         ]);
         $request->setQuery($params);
@@ -61,7 +61,7 @@ class LoginPostUpdater
     }
     public function aroundExecute(\Magento\Customer\Controller\Account\LoginPost $subject, callable $proceed)
     {
-        if(!$this->helperData->getIsEnabled()) {
+        if(!$this->dataProvider->getIsEnabled()) {
             return $proceed;
         }
         $postValues = $subject->getRequest()->getPostValue();
