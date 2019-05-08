@@ -6,23 +6,31 @@ namespace Ivan\GoogleCaptcha\Block;
 
 use Magento\Framework\View\Element\Template;
 
-class Captcha extends \Magento\Customer\Block\Form\Login
+class Captcha extends \Magento\Framework\View\Element\Template
 {
-    private $helperData;
+    private $dataProvider;
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Model\Url $customerUrl,
-        \Ivan\GoogleCaptcha\Helper\Data $helperData,
+        \Ivan\GoogleCaptcha\Model\DataProvider $dataProvider,
         array $data = []
     ) {
-        parent::__construct($context, $customerSession, $customerUrl, $data);
-        $this->helperData = $helperData;
+        parent::__construct($context, $data);
+        $this->dataProvider = $dataProvider;
     }
 
-    public function getHelperData()
+    public function getCaptchaType()
     {
-        return $this->helperData;
+        return $this->dataProvider->getCaptchaType();
+    }
+
+    public function getPublicSiteKey()
+    {
+        return $this->dataProvider->getPublicSiteKey();
+    }
+
+    public function getIsEnabled()
+    {
+        return $this->dataProvider->getIsEnabled();
     }
 }

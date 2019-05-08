@@ -4,7 +4,7 @@
 namespace Ivan\GoogleCaptcha\Helper;
 
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class CaptchaData extends \Magento\Framework\App\Helper\AbstractHelper
 {
     protected $publicSiteKey;
     protected $privateSiteKey;

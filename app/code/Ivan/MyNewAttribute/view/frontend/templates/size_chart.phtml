@@ -1,5 +1,6 @@
 <?php
-$sizeChartValue = $block->getSizeChartValue();
+$viewModel = $block->getViewModel();
+$sizeChartValue = $viewModel->getSizeChartValue();
 ?>
 <table>
 <?php foreach ($sizeChartValue as $size => $value) : ?>
