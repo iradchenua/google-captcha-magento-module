@@ -29,13 +29,9 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
     {
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
-
         /**
          * Add attributes to the eav/attribute
          */
-
-        $eavSetup->removeAttribute(\Magento\Catalog\Model\Product::ENTITY, 'size_chart');
-
         $eavSetup->addAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'size_chart',

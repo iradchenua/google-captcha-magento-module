@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ivan\MyNewAttribute\ViewModel\SizeChart;
+namespace Ivan\MyNewAttribute\ViewModel;
 
 class SizeChart implements \Magento\Framework\View\Element\Block\ArgumentInterface
 {
