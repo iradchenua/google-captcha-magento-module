@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="namespace" xsi:type="string">dynamicshipping_grid</item>
+            <item name="provider" xsi:type="string">dynamicshipping_grid.dynamicshipping_grid_data_source</item>
+            <item name="deps" xsi:type="string">dynamicshipping_grid.dynamicshipping_grid_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">dynamicshipping_grid_columns</item>
+    </argument>
+    <dataSource name="dynamicshipping_grid_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Ivan\DynamicShipping\Model\DataProvider</argument>
+            <argument name="name" xsi:type="string">dynamicshipping_grid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+        </argument>
+    </dataSource>
+    <columns name="dynamicshipping_grid_columns">
+        <column name="code2">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Alpha-2</item>
+                </item>
+            </argument>
+        </column>
+        <column name="code3">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Alpha-3</item>
+                </item>
+            </argument>
+        </column>
+        <column name="code_num">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Numeric</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
+</listing>
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<listing
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">dynamicshipping_grid.dynamicshipping_grid_data_source</item>
+            <item name="namespace" xsi:type="string">dynamicshipping_grid</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/add/*"/>
+                <class>primary</class>
+                <label translate="true">Add New Carrier</label>
+            </button>
+        </buttons>
+        <spinner>dynamicshipping_grid_columns</spinner>
+        <deps>
+            <dep>dynamicshipping_grid.dynamicshipping_grid_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="dynamicshipping_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <dataProvider class="Ivan\DynamicShipping\Model\DataProvider" name="dynamicshipping_grid_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <columns name="dynamicshipping_grid_columns">
+        <column name="code2">
+            <settings>
+                <label translate="true">Alpha-2</label>
+            </settings>
+        </column>
+        <column name="code3">
+            <settings>
+                <label translate="true">Alpha-3</label>
+            </settings>
+        </column>
+        <column name="code_num">
+            <settings>
+                <label translate="true">Numeric</label>
+            </settings>
+        </column>
+    </columns>
+</listing>-->
