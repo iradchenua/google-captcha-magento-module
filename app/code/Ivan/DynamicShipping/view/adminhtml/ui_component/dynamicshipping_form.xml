@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
-<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="namespace" xsi:type="string">dynamicshipping_form</item>
             <item name="provider" xsi:type="string">dynamicshipping_form.dynamicshipping_form_data_source</item>
-            <item name="deps" xsi:type="string">dynamicshipping_form.dynamicshipping_form_data_source</item>
+        </item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
+        <item name="label" xsi:type="string" translate="true">New carrier information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="array">
+                <item name="name" xsi:type="string">back</item>
+                <item name="label" xsi:type="string" translate="true">Back</item>
+                <item name="class" xsi:type="string">secondary</item>
+                <item name="url" xsi:type="string">*/manage/index</item>
+            </item>
         </item>
     </argument>
     <settings>
@@ -18,30 +22,25 @@
             <button name="save" class="Ivan\DynamicShipping\Block\Adminhtml\Carrier\Edit\Button\Save"/>
         </buttons>
         <namespace>dynamicshipping_form</namespace>
+        <dataScope>data</dataScope>
         <ajaxSave>false</ajaxSave>
         <ajaxSaveType>simple</ajaxSaveType>
-        <dataScope>data</dataScope>
         <deps>
             <dep>dynamicshipping_form.dynamicshipping_form_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="dynamicshipping_form_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Ivan\DynamicShipping\Model\DataProvider</argument>
-            <argument name="name" xsi:type="string">dynamicshipping_form_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
-                    <item name="submit_url" path="*/edit/save/index" xsi:type="url" />
-                </item>
-            </argument>
-        </argument>
+    <dataSource name="dynamicshipping_form_data_source" component="Magento_Ui/js/form/provider">
         <settings>
             <validateUrl path="*/add/validate"/>
             <submitUrl path="*/edit/save/index"/>
         </settings>
+        <aclResource>Magento_Backend::content</aclResource>
+        <dataProvider class="Ivan\DynamicShipping\Model\DataProvider" name="dynamicshipping_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>dynamicshipping_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <fieldset name="carrier_details">
         <argument name="data" xsi:type="array">
@@ -49,11 +48,25 @@
                 <item name="label" xsi:type="string" translate="true">Adding new Carrier</item>
             </item>
         </argument>
+        <field name="dynamicshipping_id" template="ui/form/field">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">number</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="source" xsi:type="string">dynamicshipping_id</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <visible>false</visible>
+            </settings>
+        </field>
         <field name="carrier_is_active" sortOrder="10" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">carrier</item>
                     <item name="default" xsi:type="number">1</item>
+                    <item name="source" xsi:type="string">is_active</item>
                 </item>
             </argument>
             <settings>
@@ -61,6 +74,7 @@
                     <rule name="required-entry" xsi:type="boolean">false</rule>
                 </validation>
                 <dataType>boolean</dataType>
+                <dataScope>is_active</dataScope>
                 <label translate="true">Enable Carrier</label>
             </settings>
             <formElements>
@@ -76,59 +90,42 @@
             </formElements>
         </field>
         <field name="carrier_code">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">carrier</item>
-                </item>
-            </argument>
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
-                <dataType>text</dataType>
+                <dataType>string</dataType>
                 <label translate="true">Carrier code</label>
+                <dataScope>code</dataScope>
             </settings>
         </field>
         <field name="carrier_name">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">carrier</item>
-                </item>
-            </argument>
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
-                <dataType>text</dataType>
+                <dataType>string</dataType>
                 <label translate="true">Carrier name</label>
+                <dataScope>name</dataScope>
             </settings>
         </field>
         <field name="shipping_method">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">shipping</item>
-                </item>
-            </argument>
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
-                <dataType>text</dataType>
+                <dataType>string</dataType>
                 <label translate="true">Shipping method</label>
             </settings>
         </field>
         <field name="shipping_price">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">shipping</item>
-                </item>
-            </argument>
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>number</dataType>
                 <label translate="true">Shipping price</label>
+                <dataScope>price</dataScope>
             </settings>
         </field>
     </fieldset>

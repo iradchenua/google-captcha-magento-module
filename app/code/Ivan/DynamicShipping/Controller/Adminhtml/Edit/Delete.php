@@ -10,7 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Cache\Manager as CacheManager;
 use Magento\Framework\App\Cache\TypeListInterface as CacheTypeListInterface;
 
-class Save extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class Delete extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     private $dynamicCarrierFactory;
     /**
@@ -30,6 +30,7 @@ class Save extends Action implements HttpGetActionInterface, HttpPostActionInter
      */
     private $cacheManager;
 
+
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Ivan\DynamicShipping\Model\DynamicCarrierFactory $dynamicCarrierFactory,
@@ -46,59 +47,42 @@ class Save extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
     }
-
-    private function saveToConfig($newCarrier)
+    private function deleteFromConfig($carrier)
     {
-        $path = "carriers/dynamic_" . $newCarrier->getCode();
-        $this->coreConfig->saveConfig(
-             $path . "/title",
-            $newCarrier->getName()
+        $path = "carriers/dynamic_" . $carrier->getCode();
+        $this->coreConfig->deleteConfig(
+            $path . "/title"
         );
-        $this->coreConfig->saveConfig(
-            $path . "/active",
-            $newCarrier->getIsActive()
+        $this->coreConfig->deleteConfig(
+            $path . "/active"
         );
-        $this->coreConfig->saveConfig(
-            $path .'/model',
-            \Ivan\DynamicShipping\Model\ShippingTemplate::class
+        $this->coreConfig->deleteConfig(
+            $path .'/model'
         );
-        $this->coreConfig->saveConfig(
-            $path .'/showmethod',
-            1
+        $this->coreConfig->deleteConfig(
+            $path .'/showmethod'
         );
-        $this->coreConfig->saveConfig(
-            $path .'/price',
-            $newCarrier->getPrice()
+        $this->coreConfig->deleteConfig(
+            $path .'/price'
         );
-        $this->coreConfig->saveConfig(
-            $path .'/name',
-            $newCarrier->getShippingMethod()
+        $this->coreConfig->deleteConfig(
+            $path .'/name'
         );
-    }
-
-    private function saveToModel($newCarrier, $postValues)
-    {
-
-        $newCarrier->setCode(trim($postValues['code']));
-        $newCarrier->setName(trim($postValues['name']));
-        $newCarrier->setIsActive($postValues['is_active']);
-        $newCarrier->setShippingMethod(trim($postValues['shipping_method']));
-        $newCarrier->setPrice($postValues['price']);
-        $this->resourceModel->save($newCarrier);
     }
     public function execute()
     {
         $postValues = $this->getRequest()->getPostValue();
-        $newCarrier = $this->dynamicCarrierFactory->create();
-        if (isset($postValues['dynamicshipping_id'])) {
-            $this->resourceModel->load($newCarrier, $postValues['dynamicshipping_id']);
+        $carrier = $this->dynamicCarrierFactory->create();
+        foreach($postValues['selected'] as $selectedId) {
+            $this->resourceModel->load($carrier, $selectedId);
+            $carrier->load($selectedId);
+            $this->deleteFromConfig($carrier);
+            $this->resourceModel->delete($carrier);
         }
-        $this->saveToModel($newCarrier, $postValues);
-        $this->saveToConfig($newCarrier);
-        $this->messageManager->addSuccessMessage('new carrier was created');
+        $this->messageManager->addSuccessMessage('carrier/s was/were deleted');
         $this->cache->invalidate(['full_page', 'config']);
         return $this->resultFactory
-                ->create(ResultFactory::TYPE_REDIRECT)
-                ->setPath('*/add/index', ['error' => false]);
+            ->create(ResultFactory::TYPE_REDIRECT)
+            ->setPath('*/manage/index', ['error' => false]);
     }
 }

@@ -9,90 +9,116 @@
             <item name="deps" xsi:type="string">dynamicshipping_grid.dynamicshipping_grid_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">dynamicshipping_grid_columns</item>
-    </argument>
-    <dataSource name="dynamicshipping_grid_data_source">
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+        <item name="buttons" xsi:type="array">
+            <item name="add" xsi:type="array">
+                <item name="name" xsi:type="string">add</item>
+                <item name="label" xsi:type="string" translate="true">Add New Carrier</item>
+                <item name="class" xsi:type="string">primary</item>
+                <item name="url" xsi:type="string">*/add/*</item>
             </item>
-        </argument>
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Ivan\DynamicShipping\Model\DataProvider</argument>
-            <argument name="name" xsi:type="string">dynamicshipping_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-        </argument>
-    </dataSource>
-    <columns name="dynamicshipping_grid_columns">
-        <column name="code2">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Alpha-2</item>
-                </item>
-            </argument>
-        </column>
-        <column name="code3">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Alpha-3</item>
-                </item>
-            </argument>
-        </column>
-        <column name="code_num">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Numeric</item>
-                </item>
-            </argument>
-        </column>
-    </columns>
-</listing>
-<!--<?xml version="1.0" encoding="UTF-8"?>
-<listing
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <argument name="data" xsi:type="array">
-        <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">dynamicshipping_grid.dynamicshipping_grid_data_source</item>
-            <item name="namespace" xsi:type="string">dynamicshipping_grid</item>
         </item>
     </argument>
-    <settings>
-        <buttons>
-            <button name="add">
-                <url path="*/add/*"/>
-                <class>primary</class>
-                <label translate="true">Add New Carrier</label>
-            </button>
-        </buttons>
-        <spinner>dynamicshipping_grid_columns</spinner>
-        <deps>
-            <dep>dynamicshipping_grid.dynamicshipping_grid_data_source</dep>
-        </deps>
-    </settings>
     <dataSource name="dynamicshipping_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="dataScope" xsi:type="string">filters.store_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Backend::content</aclResource>
         <dataProvider class="Ivan\DynamicShipping\Model\DataProvider" name="dynamicshipping_grid_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
-                <primaryFieldName>entity_id</primaryFieldName>
+                <primaryFieldName>dynamicshipping_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <filterSelect name="store_id" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>
+                    <caption translate="true">All Store Views</caption>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_id</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete the selected carriers?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="*/edit/delete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
     <columns name="dynamicshipping_grid_columns">
-        <column name="code2">
+        <selectionsColumn name="ids" sortOrder="10">
             <settings>
-                <label translate="true">Alpha-2</label>
+                <indexField>dynamicshipping_id</indexField>
             </settings>
+        </selectionsColumn>
+        <column name="dynamicshipping_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">ID</item>
+                    <item name="sorting" xsi:type="string">asc</item>
+                </item>
+            </argument>
         </column>
-        <column name="code3">
+        <column name="name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Name</item>
+                </item>
+            </argument>
+        </column>
+        <column name="code">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Code</item>
+                </item>
+            </argument>
+        </column>
+        <column name="shipping_method">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Shipping Method</item>
+                </item>
+            </argument>
+        </column>
+        <column name="price">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Price</item>
+                </item>
+            </argument>
+        </column>
+        <column name="is_active">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Active</item>
+                </item>
+            </argument>
+        </column>
+        <actionsColumn name="actions" class="Ivan\DynamicShipping\Ui\Component\Listing\Column\Actions">
             <settings>
-                <label translate="true">Alpha-3</label>
+                <indexField>dynamicshipping_id</indexField>
             </settings>
-        </column>
-        <column name="code_num">
-            <settings>
-                <label translate="true">Numeric</label>
-            </settings>
-        </column>
+        </actionsColumn>
     </columns>
-</listing>-->
+</listing>
